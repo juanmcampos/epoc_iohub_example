@@ -236,7 +236,8 @@ class EmotivEPOC(object):
     def calibrateGyro(self):
         """Gyroscope has a baseline value. We can subtract that
         from the acquired values to maintain the baseline at (0,0)"""
-        pass
+        self.gyroX   = self.getGyroX()
+        self.gyroY   = self.getGyroY()
 
     def getSignal(self):
         signal = self.acquireData()
@@ -244,11 +245,11 @@ class EmotivEPOC(object):
 
     def getGyroX(self):
         self.acquireData()
-        yield self.gyroX
+        return self.gyroX
 
     def getGyroY(self):
         self.acquireData()
-        yield self.gyroY
+        return self.gyroY
 
     def getContactQuality(self, electrode):
         "Return contact quality for the specified electrode."""

@@ -23,6 +23,7 @@ for k,v in emotiv.devices.iteritems():
     print("Found dongle with S/N: %s" % k)
 
 emotiv.setupEncryption()
+emotiv.calibrateGyro()
 from psychopy.core import getTime
 import numpy as np
 
@@ -47,12 +48,12 @@ def printGroupStats(sample_array,sample_count,sample_type_label):
 def checkTiming(get_func):
 
     signal_durs = np.zeros(SAMPLE_SIZE)
-    test_start=getTime()
     sig_i,none_i= 0,0
     while True:
         start_time=getTime()*1000.0
         signal = get_func()
         sig_time=getTime()*1000.0
+        print sig_time, signal
         sig_dur=sig_time-start_time
 
         if sig_i<SAMPLE_SIZE:
@@ -66,4 +67,6 @@ def checkTiming(get_func):
             break
 
 checkTiming(emotiv.getSignal)
-checkTiming(emotiv.getBatteryLevel)
+#checkTiming(emotiv.getBatteryLevel)
+#checkTiming(emotiv.getGyroX)
+#checkTiming(emotiv.getGyroY)
