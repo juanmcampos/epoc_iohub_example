@@ -1,0 +1,18 @@
+Enumerating devices...
+Found dongle with S/N: SN20130116000287
+Read Stats - getSignal  ( in msec ):
+	Count: 1000
+	Min: 2.89416313171
+	Max: 9.89603996277
+	mean: 7.74731230736
+	median: 7.96103477478
+	std: 0.825281302045
+
+Read Stats - getBatteryLevel  ( in msec ):
+	Count: 1000
+	Min: 0.000953674316406
+	Max: 0.101089477539
+	mean: 0.00151300430298
+	median: 0.00119209289551
+	std: 0.00319208808588
+

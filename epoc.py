@@ -189,7 +189,7 @@ class EmotivEPOC(object):
 
     def acquireData(self, dump=False):
         try:
-            raw = self.endpoints[self.serialNumber].read(32, timeout=100)
+            raw = self.endpoints[self.serialNumber].read(32, timeout=0)
             bits = BitArray(bytes=self.cipher.decrypt(raw))
             #print("aaaa"+bits[0])
 
