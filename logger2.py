@@ -1,6 +1,7 @@
-from epoc import EmotivEPOC
+from epoc2 import EmotivEPOC
 from time import clock, sleep
 import sys
+from multiprocessing import Process
 
 # Enumerations for EEG channels (14 channels)
 CH_F3, CH_FC5, CH_AF3, CH_F7, CH_T7,  CH_P7, CH_O1,\
@@ -23,7 +24,8 @@ for k,v in emotiv.devices.iteritems():
     print("Found dongle with S/N: %s" % k)
 
 emotiv.setupEncryption()
-emotiv.calibrateGyro()
+#emotiv.calibrateGyro()
+emotiv.startAcuisition()
 from psychopy.core import getTime
 import numpy as np
 
@@ -49,11 +51,16 @@ def checkTiming(get_func):
 
     signal_durs = np.zeros(SAMPLE_SIZE)
     sig_i,none_i= 0,0
-    while True:
+    tot_time=getTime()*1000
+    start_time=0
+    count = 0
+    while start_time- tot_time<=10000:
         start_time=getTime()*1000.0
         signal = get_func()
+        if not signal==None:
+            count+=1
+            print signal
         sig_time=getTime()*1000.0
-        print sig_time, signal
         sig_dur=sig_time-start_time
 
         if sig_i<SAMPLE_SIZE:
@@ -61,12 +68,10 @@ def checkTiming(get_func):
             sig_i+=1
         elif sig_i==SAMPLE_SIZE and sig_i!=-1:
             sig_i=-1
+    print count
+    printGroupStats(signal_durs,sig_i,"Read Stats - %s" % get_func.__name__)
 
-        if sig_i==SAMPLE_SIZE:
-            printGroupStats(signal_durs,sig_i,"Read Stats - %s" % get_func.__name__)
-            break
-
-checkTiming(emotiv.getSignal)
+#checkTiming(emotiv.getSignalFromQueue)
 #checkTiming(emotiv.getBatteryLevel)
-#checkTiming(emotiv.getGyroX)
-#checkTiming(emotiv.getGyroY)
+checkTiming(emotiv.getGyroFromQueue)
+checkTiming(emotiv.getGyroY)
