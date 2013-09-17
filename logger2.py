@@ -1,4 +1,4 @@
-from epoc2 import EmotivEPOC
+from epoc_iohub import EmotivDevice
 from time import clock, sleep
 import sys
 from multiprocessing import Process
@@ -7,24 +7,8 @@ from multiprocessing import Process
 CH_F3, CH_FC5, CH_AF3, CH_F7, CH_T7,  CH_P7, CH_O1,\
 CH_O2, CH_P8,  CH_T8,  CH_F8, CH_AF4, CH_FC6,CH_F4 = range(14)
 
-emotiv = EmotivEPOC()
+emotiv = EmotivDevice()
 
-print("Enumerating devices...")
-try:
-    emotiv.enumerate()
-except EmotivEPOCNotFoundException, e:
-    if emotiv.permissionProblem:
-        print("Please make sure that device permissions are handled.")
-    else:
-        print("Please make sure that device permissions are handled or"\
-                " at least 1 Emotiv EPOC dongle is plugged.")
-    sys.exit(1)
-
-for k,v in emotiv.devices.iteritems():
-    print("Found dongle with S/N: %s" % k)
-
-emotiv.setupEncryption()
-#emotiv.calibrateGyro()
 emotiv.startAcuisition()
 from psychopy.core import getTime
 import numpy as np
@@ -71,7 +55,7 @@ def checkTiming(get_func):
     print count
     printGroupStats(signal_durs,sig_i,"Read Stats - %s" % get_func.__name__)
 
-#checkTiming(emotiv.getSignalFromQueue)
+checkTiming(emotiv.getSignal)
 #checkTiming(emotiv.getBatteryLevel)
-checkTiming(emotiv.getGyroFromQueue)
-checkTiming(emotiv.getGyroY)
+#checkTiming(emotiv.getGyroFromQueue)
+#checkTiming(emotiv.getGyroY)
